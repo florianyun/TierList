@@ -6,16 +6,16 @@ cursor = conn.cursor()
 
 cursor.execute('''CREATE TABLE IF NOT EXISTS element (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  title TEXT,
-                  group TEXT,
+                  titre TEXT,
+                  groupe TEXT,
                   source TEXT,
-                  category_id INTEGER NULLABLE,
-                  order INTEGER NULLABLE,
-                  FOREIGN KEY (category_id) REFERENCES category(id))''')
+                  categorie_id INTEGER NULLABLE,
+                  ordre INTEGER NULLABLE,
+                  FOREIGN KEY (categorie_id) REFERENCES categorie(id))''')
 
-cursor.execute('''CREATE TABLE IF NOT EXISTS category (
+cursor.execute('''CREATE TABLE IF NOT EXISTS categorie (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
-                  name TEXT)''')
+                  nom TEXT)''')
 
 conn.commit()
 conn.close()

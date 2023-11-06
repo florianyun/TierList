@@ -18,7 +18,7 @@ async def get_categories():
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM category JOIN element ON category_id=category.id WHERE category_id IS NOT NULL")
+        cursor.execute("SELECT * FROM categorie JOIN element ON categorie_id=categorie.id WHERE categorie_id IS NOT NULL")
         categories = cursor.fetchall()
         return categories
     except Exception as e:
@@ -32,7 +32,7 @@ async def create_category(category: str):
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO category (name) VALUES ", (category))
+        cursor.execute("INSERT INTO categorie (nom) VALUES ", (category))
         conn.commit()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -41,8 +41,8 @@ async def create_category(category: str):
         conn.close()
 
 class Element(BaseModel):
-    title : str
-    group : str
+    titre : str
+    groupe : str
     source : str
 
 @app.get("/elements/")
@@ -50,8 +50,8 @@ async def get_elements():
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT id, title, group, source FROM element WHERE category_id IS NULL")
-        elements = [{"id": row[0], "title": row[1], "group": row[2], "source": row[3]} for row in cursor.fetchall()]
+        cursor.execute("SELECT id, titre, groupe, source FROM element WHERE category_id IS NULL")
+        elements = [{"id": row[0], "titre": row[1], "groupe": row[2], "source": row[3]} for row in cursor.fetchall()]
         return elements
     except Exception as e:
         logging
@@ -65,7 +65,7 @@ async def create_element(element: Element):
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO element (title, group, source) VALUES (?, ?, ?)", (element.title, element.group, element.source))
+        cursor.execute("INSERT INTO element (titre, groupe, source) VALUES (?, ?, ?)", (element.titre, element.groupe, element.source))
         conn.commit()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
