@@ -34,7 +34,7 @@ export class ElementListComponent implements OnInit {
 
   saveElements() {
     const updatedElements = this.elements.map((element, index) => ({ ...element, ordre: index }));
-    this.elementService.updateElementList(updatedElements);
+    this.elementService.updateElementList(updatedElements).subscribe();
   }  
 
   drop(event: CdkDragDrop<string[]>) {
