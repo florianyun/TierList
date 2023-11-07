@@ -51,7 +51,7 @@ async def get_elements():
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT id, titre, groupe, source FROM element WHERE category_id IS NULL ORDER BY ordre")
+        cursor.execute("SELECT id, titre, groupe, source, ordre FROM element WHERE category_id IS NULL ORDER BY ordre")
         elements = [{"id": row[0], "titre": row[1], "groupe": row[2], "source": row[3], "ordre": row[4]} for row in cursor.fetchall()]
         return elements
     except Exception as e:
@@ -88,11 +88,11 @@ async def delete_element(id: int):
         conn.close()
 
 @app.put("/elements/{id}")
-async def delete_element(element: Element):
+async def delete_element(id: int, element: Element):
     conn = sqlite3.connect('tier_list.db')
     cursor = conn.cursor()
     try:
-        cursor.execute("UPDATE element SET titre=? groupe=? source=? ordre=? WHERE id=?", (element.titre, element.groupe, element.source, element.ordre, element.id))
+        cursor.execute("UPDATE element SET titre=?, groupe=?, source=?, ordre=? WHERE id=?", (element.titre, element.groupe, element.source, element.ordre, id))
         conn.commit()
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
