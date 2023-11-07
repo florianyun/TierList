@@ -1,0 +1,41 @@
+<div  style="display: flex; flex-direction: column;">
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label>Title</mat-label>
+      <input matInput name="title" [(ngModel)]="newElement.titre">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Group</mat-label>
+        <input matInput name="group" [(ngModel)]="newElement.groupe">
+      </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>Source</mat-label>
+        <input matInput name="source" [(ngModel)]="newElement.source">
+    </mat-form-field>
+    <button matSuffix mat-icon-button aria-label="Add" (click)="addElement()">
+        <mat-icon>add</mat-icon>
+      </button>
+</form>
+<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <div class="example-box" cdkDrag *ngFor="let element of elements">
+        <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{element.titre}}</mat-card-title>
+              <mat-card-subtitle>{{element.groupe}}</mat-card-subtitle>
+            </mat-card-header>
+            <img class="picture" mat-card-image src={{element.source}} alt={{element.titre}}>
+            <button class="delete-button" matSuffix mat-icon-button aria-label="Delete" (click)="deleteElement(element.id!)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </mat-card>
+    </div>
+</div>
+<button mat-icon-button (click)="saveElements()">
+    <mat-icon>save</mat-icon>
+</button>
+<button mat-icon-button>
+    <mat-icon>download</mat-icon>
+</button>
+</div>
