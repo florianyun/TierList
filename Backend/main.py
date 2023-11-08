@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 import sqlite3
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+from models import Element
+from fastapi.responses import FileResponse
+from pdfBuilder import build_pdf
 
 app = FastAPI()
 app.add_middleware(
@@ -39,12 +41,6 @@ async def create_category(category: str):
     finally:
         cursor.close()
         conn.close()
-
-class Element(BaseModel):
-    titre : str
-    groupe : str
-    source : str
-    ordre : int
 
 @app.get("/elements/")
 async def get_elements():
@@ -99,3 +95,20 @@ async def delete_element(id: int, element: Element):
     finally:
         cursor.close()
         conn.close()
+
+@app.get("/download-pdf/")
+async def download_pdf():
+    conn = sqlite3.connect('tier_list.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT titre, groupe, source FROM element WHERE category_id IS NULL ORDER BY ordre")
+        elements = [Element(titre=row[0],groupe=row[1],source=row[2]) for row in cursor.fetchall()]
+        build_pdf(elements, 'tier_list.pdf')
+        return FileResponse('tier_list.pdf', filename="tier_list.pdf", headers={"Content-Disposition": "attachment"})
+    except Exception as e:
+        logging
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        cursor.close()
+        conn.close()
+    

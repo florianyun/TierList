@@ -32,10 +32,12 @@
         </mat-card>
     </div>
 </div>
-<button mat-icon-button (click)="saveElements()">
+<button mat-icon-button aria-label="Save" (click)="saveElements()">
     <mat-icon>save</mat-icon>
 </button>
-<button mat-icon-button>
+<a href="http://localhost:8000/download-pdf">
+<button style="width: 100%;" mat-icon-button aria-label="Download">
     <mat-icon>download</mat-icon>
 </button>
+</a>
 </div>
